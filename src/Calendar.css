@@ -1,0 +1,266 @@
+/* GoogleCalendar.css */
+
+body {
+     background-image: url('./components/ai-background.jpg');  
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent white background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #357ae8;
+}
+
+input[type="email"], .email-input, .meeting-input {
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px;
+    width: 80%;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
+}
+
+.calendar-container {
+    height: 500px;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.available-times {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+input, button {
+    margin: 5px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #357ae8;
+}
+
+.schedule-meeting {
+    margin-top: 20px;
+}
+
+input {
+    margin-right: 10px;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.available-times ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.signin-btn, .signout-btn, .search-btn, .schedule-btn {
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.signin-btn:hover, .signout-btn:hover, .search-btn:hover, .schedule-btn:hover {
+    background-color: #357AE8;
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+.timeslots {
+    list-style-type: none;
+    padding: 0;
+}
+
+.timeslot-item {
+    margin-bottom: 10px;
+}
+
+.calendar-container {
+    margin-top: 20px;
+}
+
+.selected-slot {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .email-input, .meeting-input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .signin-btn, .signout-btn, .search-btn, .schedule-btn {
+        width: 100%;
+    }
+}
+
+/* Calendar.css */
+
+/* Container for the slots */
+.slots-container {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Styling for the ul to use grid layout */
+.slots-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+}
+
+/* Each slot item */
+.slot-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slot-item button {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.slot-item button:hover {
+    background-color: #0056b3;
+}
+
+/* Calendar.css */
+
+/* Add styling for the header */
+/* Add this to style the header properly */
+.header {
+    display: flex;
+    justify-content: space-between; /* Space between the logo/title and the sign-out button */
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 10px;
+
+    /* Gradient background */
+    background: linear-gradient(white, #4A90E2, #9013FE);
+    color: white;
+}
+
+
+.logo {
+    max-height: 50px;
+    width: auto;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.header-right {
+    display: flex;
+    align-items:flex-end;
+}
+
+.header button {
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.header button:hover {
+    background-color: #357AE8;
+}
+
+
+
+h1.cal {
+    font-size: 36px;
+    color: #ffffff;
+    margin-left: 55%;
+}
+.ac{
+    color: #0056b3;
+    font-weight: bolder;
+    font-size: 20px;
+}
