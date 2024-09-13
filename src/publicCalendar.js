@@ -78,16 +78,19 @@ const PublicCalendar = () => {
     };
 
     const handleScheduleMeeting = () => {
+        const myEmail = 'your-email@gmail.com'; // Your email
+    
         if (!selectedSlot || !userEmail) {
             alert('Please select a time slot and provide your email.');
             return;
         }
-
+    
         // Schedule meeting in the user's calendar
         gapi.client.calendar.events.insert({
             calendarId: 'primary', // The primary calendar to insert the meeting into
             resource: {
-                summary: 'Scheduled Meeting', // You can customize the meeting title
+                summary: 'Scheduled Meeting',
+                description: 'Meeting scheduled via the app',
                 start: {
                     dateTime: new Date(selectedSlot.start).toISOString(),
                     timeZone: 'UTC'
@@ -96,16 +99,30 @@ const PublicCalendar = () => {
                     dateTime: new Date(selectedSlot.end).toISOString(),
                     timeZone: 'UTC'
                 },
-                attendees: [{ email: userEmail }]
+                attendees: [
+                    { email: userEmail }, 
+                    { email: myEmail }    
+                ],
+                conferenceData: {
+                    createRequest: {
+                        requestId: `meet-${Date.now()}`, // Unique request ID
+                        conferenceSolutionKey: {
+                            type: 'hangoutsMeet' // Generates a Google Meet link
+                        }
+                    }
+                }
             },
-            sendUpdates: 'all'
+            sendUpdates: 'all',
+            conferenceDataVersion: 1 // Necessary for creating Google Meet link
         }).then(response => {
-            alert('Meeting scheduled successfully!');
+            const meetLink = response.result.hangoutLink;
+            alert(`Meeting scheduled successfully! Meet link: ${meetLink}`);
         }).catch(error => {
-            console.error('Error scheduling meeting:', error);
-            alert('Error scheduling meeting.');
+            console.error('Error scheduling meeting:', error.result || error.message || error);
+            alert('Error scheduling meeting. Check the console for details.');
         });
     };
+    
 
     return (
         <div>
