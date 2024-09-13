@@ -10,6 +10,7 @@ const PublicCalendar = () => {
     const [availableTimes, setAvailableTimes] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [userEmail, setUserEmail] = useState('');
+    const [ownerEmail, setOwnerEmail] = useState('');
 
     useEffect(() => {
         const initClient = () => {
@@ -78,13 +79,11 @@ const PublicCalendar = () => {
     };
 
     const handleScheduleMeeting = () => {
-        const myEmail = 'your-email@gmail.com'; // Your email
-    
-        if (!selectedSlot || !userEmail) {
-            alert('Please select a time slot and provide your email.');
+        if (!selectedSlot || !userEmail || !ownerEmail) {
+            alert('Please select a time slot and provide both emails.');
             return;
         }
-    
+
         // Schedule meeting in the user's calendar
         gapi.client.calendar.events.insert({
             calendarId: 'primary', // The primary calendar to insert the meeting into
@@ -100,8 +99,8 @@ const PublicCalendar = () => {
                     timeZone: 'UTC'
                 },
                 attendees: [
-                    { email: userEmail }, 
-                    { email: myEmail }    
+                    { email: userEmail },  // Person scheduling the meeting
+                    { email: ownerEmail }  // Owner of the link
                 ],
                 conferenceData: {
                     createRequest: {
@@ -122,7 +121,6 @@ const PublicCalendar = () => {
             alert('Error scheduling meeting. Check the console for details.');
         });
     };
-    
 
     return (
         <div>
@@ -147,6 +145,12 @@ const PublicCalendar = () => {
                         placeholder="Enter your email"
                         value={userEmail}
                         onChange={(e) => setUserEmail(e.target.value)}
+                    />
+                    <input
+                        type="email"
+                        placeholder="Enter the owner's email"
+                        value={ownerEmail}
+                        onChange={(e) => setOwnerEmail(e.target.value)}
                     />
                     <button onClick={handleScheduleMeeting}>Schedule Meeting</button>
                 </div>
