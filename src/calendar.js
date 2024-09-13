@@ -14,7 +14,7 @@ const GoogleCalendar = () => {
     const localizer = momentLocalizer(moment);
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [events, setEvents] = useState([]);
-    const [emails, setEmails] = useState('');  // Changed to handle multiple emails
+    const [emails, setEmails] = useState(''); 
     const [availableTimes, setAvailableTimes] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [meetingDetails, setMeetingDetails] = useState({
@@ -22,6 +22,7 @@ const GoogleCalendar = () => {
         startTime: '',
         endTime: ''
     });
+    const [shareLink, setShareLink] = useState('');
 
     useEffect(() => {
         const initClient = () => {
@@ -68,15 +69,15 @@ const GoogleCalendar = () => {
     };
 
     const searchAvailableTimes = () => {
-        const emailList = emails.split(',').map(email => email.trim());  // Split emails by comma
-        
+        const emailList = emails.split(',').map(email => email.trim());
+
         if (emailList.length === 0) {
             alert('Please enter at least one email to search.');
             return;
         }
 
         const timeMin = new Date().toISOString();
-        const timeMax = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();  // Next 7 days
+        const timeMax = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
         Promise.all(
             emailList.map(email =>
@@ -91,7 +92,7 @@ const GoogleCalendar = () => {
                     return { email, busySlots };
                 }).catch(error => {
                     console.error('Error fetching availability for email:', email, error);
-                    return { email, busySlots: [] };  // Return empty if error
+                    return { email, busySlots: [] };
                 })
             )
         ).then(allResponses => {
@@ -152,7 +153,7 @@ const GoogleCalendar = () => {
             return;
         }
 
-        const emailList = emails.split(',').map(email => email.trim());  // Get the list of emails
+        const emailList = emails.split(',').map(email => email.trim());
 
         gapi.client.calendar.events.insert({
             calendarId: 'primary',  
@@ -166,10 +167,10 @@ const GoogleCalendar = () => {
                     dateTime: new Date(selectedSlot.end).toISOString(),
                     timeZone: 'UTC'
                 },
-                attendees: emailList.map(email => ({ email })),  // Schedule with multiple attendees
+                attendees: emailList.map(email => ({ email })),
                 conferenceData: {
                     createRequest: {
-                        requestId: "sample123",  // Unique ID for each request
+                        requestId: "sample123",
                         conferenceSolutionKey: {
                             type: "hangoutsMeet"
                         }
@@ -180,10 +181,17 @@ const GoogleCalendar = () => {
         }).then(response => {
             alert('Meeting scheduled successfully, and invitation sent to ' + emails + '!');
             setMeetingDetails({ title: '', startTime: '', endTime: '' });
-            listUpcomingEvents();  // Refresh the calendar
+            listUpcomingEvents();
         }).catch(error => {
             alert('Error scheduling meeting: ' + error.message);
         });
+    };
+
+    const generateShareableLink = () => {
+        // For this, we'll generate a shareable link.
+        // You can share this link to view your calendar and book meetings.
+        const shareURL = window.location.origin + `/view-calendar?user=${gapi.auth2.getAuthInstance().currentUser.get().getId()}`;
+        setShareLink(shareURL);
     };
 
     return (
@@ -199,7 +207,7 @@ const GoogleCalendar = () => {
                     </div>
                 )}
             </header>
-    
+
             {isSignedIn ? (
                 <div>
                     <div>
@@ -212,7 +220,7 @@ const GoogleCalendar = () => {
                         />
                         <button onClick={searchAvailableTimes}>Search</button>
                     </div>
-    
+
                     <h2>Available Time Slots:</h2>
                     <div className="slots-container">
                         <ul className="slots-list">
@@ -225,9 +233,22 @@ const GoogleCalendar = () => {
                             ))}
                         </ul>
                     </div>
-    
-                    <div className="calendar-container">
-                        <h2>Calendar View:</h2>
+
+                    {selectedSlot && (
+                        <div>
+                            <h3>Schedule a Meeting</h3>
+                            <input
+                                type="text"
+                                placeholder="Meeting Title"
+                                value={meetingDetails.title}
+                                onChange={(e) => setMeetingDetails({ ...meetingDetails, title: e.target.value })}
+                            />
+                            <button onClick={scheduleMeeting}>Schedule Meeting</button>
+                        </div>
+                    )}
+
+                    <div>
+                        <h2>Upcoming Events:</h2>
                         <Calendar
                             localizer={localizer}
                             events={events}
@@ -236,26 +257,26 @@ const GoogleCalendar = () => {
                             style={{ height: 500 }}
                         />
                     </div>
-    
-                    <h2>Schedule a Meeting</h2>
+
+                    {/* Share Calendar */}
                     <div>
-                        <input
-                            type="text"
-                            placeholder="Meeting Title"
-                            value={meetingDetails.title}
-                            onChange={(e) => setMeetingDetails({ ...meetingDetails, title: e.target.value })}
-                        />
-                        <button onClick={scheduleMeeting}>Schedule Meeting</button>
+                        <button onClick={generateShareableLink}>Share Calendar</button>
+                        {shareLink && (
+                            <div>
+                                <p>Share this link with others to let them view and book meetings:</p>
+                                <a href={shareLink} target="_blank" rel="noopener noreferrer">{shareLink}</a>
+                            </div>
+                        )}
                     </div>
                 </div>
             ) : (
                 <div>
-                    <button onClick={handleSignIn}>Sign In with Google</button>
+                    <h2>Sign in with Google to manage your calendar:</h2>
+                    <button onClick={handleSignIn}>Sign In</button>
                 </div>
             )}
         </div>
     );
-    
 };
 
 export default GoogleCalendar;
